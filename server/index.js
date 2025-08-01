@@ -12,15 +12,9 @@ console.log('🚀 Starting server on port:', PORT);
 console.log('🌍 Environment:', process.env.NODE_ENV);
 console.log('🔧 Render port detection:', process.env.PORT ? 'Using PORT env var' : 'Using default port');
 
-// For Render port detection
 if (process.env.PORT) {
   console.log(`🎯 Render detected PORT: ${process.env.PORT}`);
 }
-
-// AGGRESSIVE PORT LOGGING FOR RENDER
-process.stdout.write(`RENDER_PORT:${PORT}\n`);
-process.stdout.write(`RENDER_SERVER_READY:true\n`);
-process.stdout.write(`RENDER_HEALTH_CHECK:/render-health\n`);
 
 // Force port logging for Render
 setInterval(() => {
@@ -31,7 +25,7 @@ setInterval(() => {
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../client/build')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // File upload configuration
 const storage = multer.diskStorage({
@@ -53,8 +47,8 @@ app.use('/api/companies', require('./routes/companies'));
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
+  res.json({
+    status: 'OK',
     message: 'Business Case Platform is running',
     port: PORT,
     environment: process.env.NODE_ENV,
@@ -64,8 +58,8 @@ app.get('/api/health', (req, res) => {
 
 // Render-specific health check (must be before catch-all)
 app.get('/render-health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
+  res.json({
+    status: 'OK',
     port: PORT,
     message: 'Render health check successful'
   });
@@ -73,23 +67,19 @@ app.get('/render-health', (req, res) => {
 
 // Root endpoint for Render health checks
 app.get('/', (req, res) => {
-  res.json({ 
-    status: 'OK', 
+  res.json({
+    status: 'OK',
     message: 'Business Case Platform is running',
-    port: PORT,
-    environment: process.env.NODE_ENV,
-    renderPort: process.env.PORT
+    port: PORT
   });
 });
 
 // Serve React app for any non-API routes (must be last)
 app.get('*', (req, res) => {
-  // In development, redirect to React dev server
   if (process.env.NODE_ENV === 'development') {
     res.redirect('http://localhost:3000' + req.url);
   } else {
-    // In production, serve the built React app
-    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+    res.sendFile(path.join(__dirname, '../public/index.html'));
   }
 });
 
@@ -101,14 +91,14 @@ const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`🔗 Server bound to 0.0.0.0:${PORT}`);
   console.log(`🌐 Render will detect port: ${PORT}`);
   console.log(`🔍 Health check available at: http://0.0.0.0:${PORT}/api/health`);
-  
+
   // AGGRESSIVE FORCE PORT DETECTION
   console.log(`🎯 RENDER_PORT_DETECTION: ${PORT}`);
   console.log(`🎯 RENDER_SERVER_READY: true`);
   process.stdout.write(`RENDER_PORT_DETECTED:${PORT}\n`);
   process.stdout.write(`RENDER_SERVER_STARTED:true\n`);
   process.stdout.write(`RENDER_HEALTH_ENDPOINT:/render-health\n`);
-  
+
   // Force exit after 30 seconds to trigger restart
   setTimeout(() => {
     console.log('🔄 Forcing restart for Render detection...');
