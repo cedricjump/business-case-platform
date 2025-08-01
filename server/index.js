@@ -7,6 +7,9 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+console.log('🚀 Starting server on port:', PORT);
+console.log('🌍 Environment:', process.env.NODE_ENV);
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -32,7 +35,22 @@ app.use('/api/companies', require('./routes/companies'));
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Business Case Platform is running' });
+  res.json({ 
+    status: 'OK', 
+    message: 'Business Case Platform is running',
+    port: PORT,
+    environment: process.env.NODE_ENV,
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Root endpoint for Render health checks
+app.get('/', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    message: 'Business Case Platform is running',
+    port: PORT
+  });
 });
 
 // Serve React app for any non-API routes
@@ -46,8 +64,16 @@ app.get('*', (req, res) => {
   }
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+// Start server with explicit host binding for Render
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Business Case Platform server running on port ${PORT}`);
   console.log(`📊 API available at http://localhost:${PORT}/api`);
   console.log(`🌐 Frontend available at http://localhost:3000`);
+  console.log(`🔗 Server bound to 0.0.0.0:${PORT}`);
+});
+
+// Handle server errors
+server.on('error', (error) => {
+  console.error('❌ Server error:', error);
+  process.exit(1);
 }); 
