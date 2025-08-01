@@ -5,7 +5,7 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
 console.log('🚀 Starting server on port:', PORT);
 console.log('🌍 Environment:', process.env.NODE_ENV);
