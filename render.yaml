@@ -10,4 +10,6 @@ services:
         value: production
       - key: PORT
         value: 10000
+      - key: MONGODB_URI
+        value: mongodb://localhost:27017/business-case-platform
     healthCheckPath: /api/health 

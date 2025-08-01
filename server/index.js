@@ -46,7 +46,7 @@ app.get('*', (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Business Case Platform server running on port ${PORT}`);
   console.log(`📊 API available at http://localhost:${PORT}/api`);
   console.log(`🌐 Frontend available at http://localhost:3000`);
