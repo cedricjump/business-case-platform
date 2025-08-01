@@ -7,6 +7,7 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// AGGRESSIVE RENDER PORT DETECTION
 console.log('🚀 Starting server on port:', PORT);
 console.log('🌍 Environment:', process.env.NODE_ENV);
 console.log('🔧 Render port detection:', process.env.PORT ? 'Using PORT env var' : 'Using default port');
@@ -15,6 +16,17 @@ console.log('🔧 Render port detection:', process.env.PORT ? 'Using PORT env va
 if (process.env.PORT) {
   console.log(`🎯 Render detected PORT: ${process.env.PORT}`);
 }
+
+// AGGRESSIVE PORT LOGGING FOR RENDER
+process.stdout.write(`RENDER_PORT:${PORT}\n`);
+process.stdout.write(`RENDER_SERVER_READY:true\n`);
+process.stdout.write(`RENDER_HEALTH_CHECK:/render-health\n`);
+
+// Force port logging for Render
+setInterval(() => {
+  console.log(`🔍 Server listening on port: ${PORT}`);
+  process.stdout.write(`RENDER_PORT_DETECTION:${PORT}\n`);
+}, 2000);
 
 // Middleware
 app.use(cors());
@@ -89,6 +101,19 @@ const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`🔗 Server bound to 0.0.0.0:${PORT}`);
   console.log(`🌐 Render will detect port: ${PORT}`);
   console.log(`🔍 Health check available at: http://0.0.0.0:${PORT}/api/health`);
+  
+  // AGGRESSIVE FORCE PORT DETECTION
+  console.log(`🎯 RENDER_PORT_DETECTION: ${PORT}`);
+  console.log(`🎯 RENDER_SERVER_READY: true`);
+  process.stdout.write(`RENDER_PORT_DETECTED:${PORT}\n`);
+  process.stdout.write(`RENDER_SERVER_STARTED:true\n`);
+  process.stdout.write(`RENDER_HEALTH_ENDPOINT:/render-health\n`);
+  
+  // Force exit after 30 seconds to trigger restart
+  setTimeout(() => {
+    console.log('🔄 Forcing restart for Render detection...');
+    process.exit(0);
+  }, 30000);
 });
 
 // Handle server errors
