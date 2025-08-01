@@ -2,6 +2,8 @@
 
 An integrated platform for building intelligent business cases using the RevenueOS framework. This tool helps consultants and sales teams create compelling business cases by analyzing company data and mapping it to strategic GTM consulting services.
 
+**🚀 Ready for deployment on Render!**
+
 ## 🎯 What This Platform Does
 
 1. **Data Ingestion**: Upload PDFs (annual reports, 10-Ks), Excel files, and notes
