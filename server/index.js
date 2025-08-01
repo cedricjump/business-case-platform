@@ -5,7 +5,7 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // AGGRESSIVE RENDER PORT DETECTION
 console.log('🚀 Starting server on port:', PORT);
@@ -98,12 +98,6 @@ const server = app.listen(PORT, '0.0.0.0', () => {
   process.stdout.write(`RENDER_PORT_DETECTED:${PORT}\n`);
   process.stdout.write(`RENDER_SERVER_STARTED:true\n`);
   process.stdout.write(`RENDER_HEALTH_ENDPOINT:/render-health\n`);
-
-  // Force exit after 30 seconds to trigger restart
-  setTimeout(() => {
-    console.log('🔄 Forcing restart for Render detection...');
-    process.exit(0);
-  }, 30000);
 });
 
 // Handle server errors
