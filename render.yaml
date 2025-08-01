@@ -4,7 +4,7 @@ services:
     env: node
     plan: free
     buildCommand: npm run install-all
-    startCommand: npm start
+    startCommand: node start-render.js
     envVars:
       - key: NODE_ENV
         value: production
@@ -12,4 +12,4 @@ services:
         value: 10000
       - key: MONGODB_URI
         value: mongodb://localhost:27017/business-case-platform
-    healthCheckPath: /api/health 
+    healthCheckPath: /render-health 

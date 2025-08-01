@@ -9,6 +9,12 @@ const PORT = process.env.PORT || 3001;
 
 console.log('🚀 Starting server on port:', PORT);
 console.log('🌍 Environment:', process.env.NODE_ENV);
+console.log('🔧 Render port detection:', process.env.PORT ? 'Using PORT env var' : 'Using default port');
+
+// For Render port detection
+if (process.env.PORT) {
+  console.log(`🎯 Render detected PORT: ${process.env.PORT}`);
+}
 
 // Middleware
 app.use(cors());
@@ -49,7 +55,18 @@ app.get('/', (req, res) => {
   res.json({ 
     status: 'OK', 
     message: 'Business Case Platform is running',
-    port: PORT
+    port: PORT,
+    environment: process.env.NODE_ENV,
+    renderPort: process.env.PORT
+  });
+});
+
+// Render-specific health check
+app.get('/render-health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    port: PORT,
+    message: 'Render health check successful'
   });
 });
 
@@ -70,6 +87,8 @@ const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`📊 API available at http://localhost:${PORT}/api`);
   console.log(`🌐 Frontend available at http://localhost:3000`);
   console.log(`🔗 Server bound to 0.0.0.0:${PORT}`);
+  console.log(`🌐 Render will detect port: ${PORT}`);
+  console.log(`🔍 Health check available at: http://0.0.0.0:${PORT}/api/health`);
 });
 
 // Handle server errors
