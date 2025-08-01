@@ -50,6 +50,15 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Render-specific health check (must be before catch-all)
+app.get('/render-health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    port: PORT,
+    message: 'Render health check successful'
+  });
+});
+
 // Root endpoint for Render health checks
 app.get('/', (req, res) => {
   res.json({ 
@@ -61,16 +70,7 @@ app.get('/', (req, res) => {
   });
 });
 
-// Render-specific health check
-app.get('/render-health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
-    port: PORT,
-    message: 'Render health check successful'
-  });
-});
-
-// Serve React app for any non-API routes
+// Serve React app for any non-API routes (must be last)
 app.get('*', (req, res) => {
   // In development, redirect to React dev server
   if (process.env.NODE_ENV === 'development') {
